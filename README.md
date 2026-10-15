@@ -11,7 +11,6 @@
 Run this command at the root of this repository folder:
 
 ```sh
-pip install kaggle
 mkdir -p data
 kaggle datasets download -d brsdincer/all-natural-disasters-19002021-eosdis -p data --unzip
 ```
