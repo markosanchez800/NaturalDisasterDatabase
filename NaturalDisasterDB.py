@@ -1,4 +1,6 @@
 import pandas as pd
+import dbHelperFunctions as dhf
+import sqlite3
 
 data1900_2021 = 'data/DISASTERS/1900_2021_DISASTERS.xlsx - emdat data.csv'
 data1970_2021 = 'data/DISASTERS/1970-2021_DISASTERS.xlsx - emdat data.csv'
@@ -9,5 +11,8 @@ df19702021 = pd.read_csv(data1970_2021, low_memory=False)
 disaster_type_label = 'Disaster Type'
 disaster_types = df19002021[disaster_type_label].unique()
 print(disaster_types)
+dhf.cleanDataFrame(df19002021)
+dhf.cleanDataFrame(df19702021)
+print(df19002021.columns)
+print(df19702021.columns)
 
-#print(df19002021.info())
