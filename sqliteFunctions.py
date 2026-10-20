@@ -56,6 +56,19 @@ def getTotalDeathsByType(connection):
     
     return cursor.fetchall()
 
+# Function to retrieve the 10 deadliest disasters
+def getDeadliestDisasters(connection):
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT Country, [Disaster Type], [Start Year], [Total Deaths]
+        FROM Disasters_1900_2021
+        ORDER BY [Total Deaths] DESC
+        LIMIT 10
+    """)
+
+    return cursor.fetchall()
+
 # Function to close the SQLite session
 def closeSQLiteSession(connection):
     connection.close()
