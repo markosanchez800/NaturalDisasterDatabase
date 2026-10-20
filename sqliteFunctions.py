@@ -43,6 +43,20 @@ def getDisastersByYear(connection, year):
 
     return cursor.fetchall()
 
+#Function to retrieve total deaths by disaster type
+def getTotalDeathsByType(connection):
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT [Disaster Type], SUM([Total Deaths])
+        FROM Disasters_1900_2021
+        GROUP BY [Disaster Type]
+        ORDER BY SUM([Total Deaths]) DESC
+    """)
+    
+    return cursor.fetchall()
+
 # Function to close the SQLite session
 def closeSQLiteSession(connection):
     connection.close()
+
