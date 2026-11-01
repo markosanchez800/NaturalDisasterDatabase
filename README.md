@@ -10,7 +10,7 @@ Natural disasters such as hurricanes, floods, wildfires, earthquakes, and severe
 Below are a list of 3rd party libraries used in this project. Be sure to install them into your environment before developing this project.
 
 ```sh
-pip install pandas kaggle matplotlib scikit-learn sqlite3
+pip install pandas kaggle matplotlib scikit-learn sqlite3 streamlit
 ```
 
 ### Obtaining the Dataset

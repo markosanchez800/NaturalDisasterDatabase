@@ -1,4 +1,5 @@
 import sqlite3
+import pandas as pd
 
 DB_NAME = "disasters.db"
 
@@ -6,6 +7,30 @@ DB_NAME = "disasters.db"
 def beginSQLiteSession():
     connection = sqlite3.connect(DB_NAME)
     return connection
+
+def streamlitQuery(connection,year1,year2,country,disaster_subgroup,disaster_type,disaster_subtype,region,continent):
+    params = [connection,year1,year2,country,disaster_subgroup,disaster_type,disaster_subtype,region,continent]
+    for p in params:
+        if p is None:
+            p = '%'
+    cursor = connection.cursor()
+    if (year1 != '%' and year2 != '%'):
+        query = """
+                SELECT *
+                FROM Disasters_1900_2021
+                WHERE Year >= ? AND Year <= ? AND Country LIKE ? AND [Disaster Subgroup] LIKE ? AND [Disaster Type] LIKE ? AND [Disaster Subtype] LIKE ? AND Region LIKE ? AND Continent LIKE ?
+                """
+        qparams = (year1,year2,country,disaster_subgroup,disaster_type,disaster_subtype,region,continent)
+    if (year2 == '%'):
+        query = """
+                SELECT *
+                FROM Disasters_1900_2021
+                WHERE Year = ? AND Country LIKE ? AND [Disaster Subgroup] LIKE ? AND [Disaster Type] LIKE ? AND [Disaster Subtype] LIKE ? AND Region LIKE ? AND Continent LIKE ?
+                """
+        qparams = (year1,country,disaster_subgroup,disaster_type,disaster_subtype,region,continent)
+    qdf = pd.read_sql_query(query,connection,params=qparams)
+    return(qdf)
+
 
 # Function to retrieve disasters by country
 def getDisastersByCountry(connection, country):
@@ -72,4 +97,3 @@ def getDeadliestDisasters(connection):
 # Function to close the SQLite session
 def closeSQLiteSession(connection):
     connection.close()
-
