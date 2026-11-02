@@ -69,6 +69,9 @@ with main_content:
         query_btn = st.form_submit_with_no_rerun = st.form_submit_button('Query')
         if query_btn:
             st.success("Querying Database!")
-            st.dataframe(sqf.streamlitQuery(connection,year1,year2,country,disaster_subgroup,disaster_type,disaster_subtype,region,continent))
+            if (sqf.streamlitQuery(connection,year1,year2,country,disaster_subgroup,disaster_type,disaster_subtype,region,continent).empty):
+                st.write('Nothing found matching that query!')
+            else:
+                st.dataframe(sqf.streamlitQuery(connection,year1,year2,country,disaster_subgroup,disaster_type,disaster_subtype,region,continent))
 
 #connection.close()
