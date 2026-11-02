@@ -79,6 +79,6 @@ with main_content:
             #Add Query Function
             st.success("Querying Database!")
             st.dataframe(sqf.streamlitQuery(connection,year1,year2,country,disaster_subgroup,disaster_type,disaster_subtype,region,continent))
-            st.rerun()
+            #st.rerun()
 
 #connection.close()
