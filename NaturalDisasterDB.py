@@ -3,6 +3,7 @@ import dbHelperFunctions as dhf
 import sqlite3
 import streamlit as st
 import sqliteFunctions as sqf
+import matplotFunctions as mpf
 
 data1900_2021 = 'data/DISASTERS/1900_2021_DISASTERS.xlsx - emdat data.csv'
 data1970_2021 = 'data/DISASTERS/1970-2021_DISASTERS.xlsx - emdat data.csv'
@@ -24,22 +25,12 @@ disaster_subtypes = df19002021['Disaster Subtype'].unique()
 regions = df19002021['Region'].unique()
 continents = df19002021['Continent'].unique()
 
-print(disaster_types)
-print(countries)
-print(regions)
-print(continents)
 dhf.cleanDataFrame(df19002021)
-#dhf.cleanDataFrame(df19702021)
-print(df19002021.columns)
 
 #Making sure SQLite is functioning properly, practing best methods and how to query for user entry later on
 connection = sqlite3.connect('disasters.db')
 df19002021.to_sql(name='Disasters_1900_2021', con = connection, if_exists = 'replace', index = False)
 cursor = connection.cursor()
-cursor.execute("SELECT [Disaster Type], Country, [Start Year], [Total Deaths] FROM Disasters_1900_2021 WHERE Country = ?",("Serbia",))
-rows = cursor.fetchall()
-for row in rows:
-    print(row)
 
 st.set_page_config(page_title='Natural Disaster Database', layout='centered')
 st.title('Natural Disaster Database')
@@ -58,16 +49,18 @@ with sidebar:
             if (variableOne and variableTwo):
                 #IMPLEMENTATION HERE
                 st.success("Chart Created!")
-                st.rerun()
+                mpf.barChart(variableOne,variableTwo)
+                #st.rerun()
             else:
                 st.error("Need Two Variables for Chart")
+
 with main_content:
     st.header('Natural Disasters 1900-2021')
     st.dataframe(df19002021,use_container_width=True,hide_index=True)
     st.subheader("Make a Query:")
     with st.form('make_query_form',clear_on_submit=True):
-        year1 = st.selectbox('Year (Starting):',years, index=None)
-        year2 = st.selectbox('Year (Ending):',years, index=None)
+        year1 = st.selectbox('Year:',years, index=None)
+        year2 = st.selectbox('Year (Range from above input):',years, index=None)
         country = st.selectbox('Country:',countries, index=None)
         disaster_subgroup = st.selectbox('Disaster Subgroup:',disaster_subgroups, index=None)
         disaster_type = st.selectbox('Disaster Type:',disaster_types, index=None)
@@ -76,9 +69,7 @@ with main_content:
         continent = st.selectbox('Continent:',continents, index=None)
         query_btn = st.form_submit_with_no_rerun = st.form_submit_button('Query')
         if query_btn:
-            #Add Query Function
             st.success("Querying Database!")
             st.dataframe(sqf.streamlitQuery(connection,year1,year2,country,disaster_subgroup,disaster_type,disaster_subtype,region,continent))
-            #st.rerun()
 
 #connection.close()

@@ -34,6 +34,14 @@ def streamlitQuery(connection,year1,year2,country,disaster_subgroup,disaster_typ
                 """
         params = [country,disaster_subgroup,disaster_type,disaster_subtype,region,continent]
         cleanedQParams = tuple('%' if p is None else p for p in params)
+    if (year1 is None and year2):
+        query = """
+                SELECT *
+                FROM Disasters_1900_2021
+                WHERE Year = ? AND Country LIKE ? AND [Disaster Subgroup] LIKE ? AND [Disaster Type] LIKE ? AND [Disaster Subtype] LIKE ? AND Region LIKE ? AND Continent LIKE ?
+                """
+        params = [year2,country,disaster_subgroup,disaster_type,disaster_subtype,region,continent]
+        cleanedQParams = tuple('%' if p is None else p for p in params)
     qdf = pd.read_sql_query(query,connection,params=cleanedQParams)
     return(qdf)
 
