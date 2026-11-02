@@ -24,6 +24,8 @@ years = df19002021['Year'].unique()
 disaster_subtypes = df19002021['Disaster Subtype'].unique()
 regions = df19002021['Region'].unique()
 continents = df19002021['Continent'].unique()
+graphTypes = ('Bar Chart', 'Scatter Plot', 'Pie Chart', 'Line Plot', 'Pre-Made Graphs')
+preMadeGraphs = ('Disasters By Country (Bar)','Disasters By Year (Bar)', 'Disasters By Continent (Pie)')
 
 dhf.cleanDataFrame(df19002021)
 
@@ -34,25 +36,37 @@ cursor = connection.cursor()
 st.set_page_config(page_title='Natural Disaster Database', layout='centered')
 st.title('Natural Disaster Database')
 sidebar, main_content = st.columns([1,2])
-# NEED TO FIGURE OUT WAY TO ALLOW FOR SPECIFIC TYPES OF CHARTS/GRAPHS
-# MAYBE BUTTON FOR DIFFERENT TYPES AND A SWITCH STATEMENT?
 with sidebar:
     st.header('Make a Chart/Plot')
     with st.form('make_chart_form',clear_on_submit=True):
-        variableOne = st.text_input('Variable One')
-        variableTwo = st.text_input('Variable Two')
+        graphType = st.selectbox('Graph Type:',graphTypes)
         #ADD ACTUAL IMPLEMENTATION  USING MATPLOTLIB
-        submit_btn = st.form_submit_with_no_rerun = st.form_submit_button('Make Chart/Graph')
-
+        submit_btn = st.form_submit_with_no_rerun = st.form_submit_button('Select Chart/Graph')
         if submit_btn:
-            if (variableOne and variableTwo):
-                #IMPLEMENTATION HERE
-                st.success("Chart Created!")
-                mpf.barChart(variableOne,variableTwo)
-                #st.rerun()
-            else:
-                st.error("Need Two Variables for Chart")
-
+            match graphType:
+                case 'Bar Chart':
+                    variableOne = st.text_input('Variable One')
+                    variableTwo = st.text_input('Variable Two')
+                case 'Line Plot':
+                    variableOne = st.text_input('Variable One')
+                    variableTwo = st.text_input('Variable Two')
+                case 'Pie Chart':
+                    variableOne = st.text_input('Variable One')
+                    variableTwo = st.text_input('Variable Two')
+                case 'Scatter Plot':
+                    variableOne = st.text_input('Variable One')
+                    variableTwo = st.text_input('Variable Two')
+                case 'Pre-Made Graphs':
+                    premadeGraph = st.selectbox('Pre-Made Graphs:',preMadeGraphs)
+                    premadebtn = st.form_submit_with_no_rerun = st.form_submit_button('Select')
+                    if premadebtn:
+                        match premadeGraph:
+                            case 'Disasters By Continent (Pie)':
+                                mpf.disastersByContinent()
+                            case 'Disasters By Country (Bar)':
+                                mpf.disastersByCountry()
+                            case 'Disasters By Year (Bar)':
+                                mpf.disastersByYear()
 with main_content:
     st.header('Natural Disasters 1900-2021')
     st.dataframe(df19002021,use_container_width=True,hide_index=True)

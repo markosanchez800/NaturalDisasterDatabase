@@ -10,6 +10,15 @@ def barChart(x,y):
 def lineGraph():
     return(1)
 
+#Pre-Made Charts
+
+def disastersByContinent():
+    return(0)
+def disastersByCountry():
+    return(0)
+def disastersByYear():
+    return(0)
+
 
 #Types of possible charts:
 #Disasters by year
