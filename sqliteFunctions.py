@@ -8,6 +8,8 @@ def beginSQLiteSession():
     connection = sqlite3.connect(DB_NAME)
     return connection
 
+# Maybe add something where we aggregate disaster types by casualties?
+# Or quantity of disasters by continent/country? 
 def streamlitQuery(connection,year1,year2,country,disaster_subgroup,disaster_type,disaster_subtype,region,continent):
     #cursor = connection.cursor()
     if (year1 and year2):

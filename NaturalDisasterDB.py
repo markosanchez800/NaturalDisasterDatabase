@@ -27,7 +27,6 @@ continents = df19002021['Continent'].unique()
 
 dhf.cleanDataFrame(df19002021)
 
-#Making sure SQLite is functioning properly, practing best methods and how to query for user entry later on
 connection = sqlite3.connect('disasters.db')
 df19002021.to_sql(name='Disasters_1900_2021', con = connection, if_exists = 'replace', index = False)
 cursor = connection.cursor()

@@ -21,3 +21,11 @@ Run this command at the root of this repository folder:
 mkdir -p data
 kaggle datasets download -d brsdincer/all-natural-disasters-19002021-eosdis -p data --unzip
 ```
+
+### Generating Streamlit Page
+
+Run this command at the root of this repository folder:
+
+```sh
+streamlit run NaturalDisasterDB.py
+```
