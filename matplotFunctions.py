@@ -5,9 +5,17 @@ import pandas as pd
 def barChart(df,x,y):
     #CURRENTLY ONLY WORKS FOR TOTAL OCCURENCES OF X
     height = 600
-    counts = df[x].value_counts().sort_values(ascending=True)
-    fig, ax = mpl.subplots(figsize=(8,max(4,len(counts)*0.3)))
-    ax.barh(counts.index,counts.values,color='forestgreen',edgecolor='black')
+    if y == 'Total Disasters':
+        counts = df[x].value_counts().sort_values(ascending=True)
+        fig, ax = mpl.subplots(figsize=(8,max(4,len(counts)*0.3)))
+        ax.barh(counts.index,counts.values,color='forestgreen',edgecolor='black')
+    elif y == 'Total Deaths':
+        #NOT SURE IF VALUES ARE IN THEIR COORESPONDING SPOTS
+        quals = df[x].unique().dropna()
+        quants = df.groupby(x)['Total Deaths'].sum().reset_index()
+        quantTuple = tuple(quants['Total Deaths'])
+        fig, ax = mpl.subplots(figsize=(8,max(4,len(quals)*0.3)))
+        ax.barh(quals,quantTuple,color='forestgreen',edgecolor='black')
     ax.set_xlabel(f'{x}')
     ax.set_ylabel(f'{y}')
     ax.margins(y=0.005)

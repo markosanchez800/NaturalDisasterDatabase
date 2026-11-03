@@ -24,7 +24,7 @@ years = df19002021['Year'].unique()
 disaster_subtypes = df19002021['Disaster Subtype'].unique()
 regions = df19002021['Region'].unique()
 continents = df19002021['Continent'].unique()
-graphTypes = ('Bar Chart', 'Scatter Plot', 'Pie Chart', 'Line Plot', 'Pre-Made Graphs')
+graphTypes = ('Bar Chart', 'Scatter Plot', 'Pie Chart (Top 5)', 'Line Plot', 'Pre-Made Graphs')
 preMadeGraphs = ('Disasters By Country (Bar)','Disasters By Year (Bar)', 'Disasters By Continent (Pie)')
 qualvariableTypes = ('Region','Country','Continent','Disaster Type','Disaster Subgroup','Disaster Subtype','Year')
 quanvariableTypes = ('Total Deaths','No Injured',"Total Damages ('000 US$)",'Total Disasters')
@@ -67,7 +67,7 @@ if toCreate:
     match graphType:
         case 'Bar Chart':
             mpf.barChart(df19002021,variableOne,variableTwo)
-        case 'Pie Chart':
+        case 'Pie Chart Top 5':
             mpf.pieChart(df19002021,variableOne,variableTwo)
 # Query generation on center
 with main_content:
