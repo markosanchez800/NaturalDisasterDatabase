@@ -26,6 +26,8 @@ regions = df19002021['Region'].unique()
 continents = df19002021['Continent'].unique()
 graphTypes = ('Bar Chart', 'Scatter Plot', 'Pie Chart', 'Line Plot', 'Pre-Made Graphs')
 preMadeGraphs = ('Disasters By Country (Bar)','Disasters By Year (Bar)', 'Disasters By Continent (Pie)')
+qualvariableTypes = ('Region','Country','Continent','Disaster Type','Disaster Subgroup','Disaster Subtype','Year')
+quanvariableTypes = ('Total Deaths','No Injured',"Total Damages ('000 US$)",'Total Disasters')
 
 dhf.cleanDataFrame(df19002021)
 
@@ -45,11 +47,12 @@ with sidebar:
         if st.button('Select'):
             st.session_state.premade_choice = premadeGraph
     elif graphType in graphTypes:
-        variableOne = st.text_input('Variable One:')
-        variableTwo = st.text_input('Variable Two:')
+        variableOne = st.selectbox('Qualitative Variable:',qualvariableTypes)
+        variableTwo = st.selectbox('Quantitative Variable:',quanvariableTypes)
         if st.button('Create'):
             st.session_state.create_choice = graphType
 choice = st.session_state.get('premade_choice')
+toCreate = st.session_state.get('create_choice')
 if choice:
     match choice:
         case 'Disasters By Continent (Pie)':
@@ -60,6 +63,12 @@ if choice:
             mpf.disastersByYear(df19002021)
         case _:
             st.warning(f'No match for {premadeGraph!r}')
+if toCreate:
+    match graphType:
+        case 'Bar Chart':
+            mpf.barChart(df19002021,variableOne,variableTwo)
+        case 'Pie Chart':
+            mpf.pieChart(df19002021,variableOne,variableTwo)
 # Query generation on center
 with main_content:
     st.header('Natural Disasters 1900-2021')

@@ -2,15 +2,32 @@ import matplotlib.pyplot as mpl
 import streamlit as st
 import pandas as pd
 
-def barChart(x,y):
-    #dbarChart = mpl.bar(x,y,color='forestgreen',edgecolor='lemonchiffon',width=0.6)
-    fig,ax = mpl.subplots()
-    ax.plot(x,y,color='forestgreen')
-    st.pyplot(fig)
+def barChart(df,x,y):
+    #CURRENTLY ONLY WORKS FOR TOTAL OCCURENCES OF X
+    height = 600
+    counts = df[x].value_counts().sort_values(ascending=True)
+    fig, ax = mpl.subplots(figsize=(8,max(4,len(counts)*0.3)))
+    ax.barh(counts.index,counts.values,color='forestgreen',edgecolor='black')
+    ax.set_xlabel(f'{x}')
+    ax.set_ylabel(f'{y}')
+    ax.margins(y=0.005)
+    fig.tight_layout()
+    st.title(f'{y} by {x}')
+    with st.container(height=height):
+        st.pyplot(fig)
 
 def lineGraph():
     return(1)
 
+def pieChart(df,x,y):
+    #CURRENTLY ONLY WORKS FOR TOTAL OCCURENCES OF X AND MOST CHARTS ARE TOO PACKED FOR READABILITY
+    #MAYBE ONLY PLOT TOP 5-6 FOR PIE CHART?
+    counts = df[x].value_counts()
+    fig, ax = mpl.subplots()
+    ax.pie(counts.values,labels=counts.index,autopct='%1.1f%%', shadow=True,startangle=90)
+    ax.axis('equal')
+    st.title(f'{y} by {x}')
+    st.pyplot(fig)
 #Pre-Made Charts
 
 def disastersByContinent(df):
