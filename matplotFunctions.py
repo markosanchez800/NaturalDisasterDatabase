@@ -36,8 +36,18 @@ def disastersByCountry(df):
         st.pyplot(fig)
 
 def disastersByYear(df):
-    return(0)
-
+    height = 600
+    counts = df['Year'].value_counts().sort_values(ascending=True)
+    fig, ax = mpl.subplots(figsize=(8,max(4,len(counts)*0.3)))
+    ax.barh(counts.index,counts.values,color='forestgreen',edgecolor='black')
+    ax.set_xlabel('Total Disasters')
+    ax.set_ylabel('Year')
+    ax.margins(y=0.005)
+    fig.tight_layout()
+    st.title('Disasters by Year')
+    with st.container(height=height):
+        st.write('Keep in mind, data collection has increased over the years and this influences total amounts')
+        st.pyplot(fig)
 
 #Types of possible charts:
 #Disasters by year
