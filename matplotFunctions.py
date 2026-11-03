@@ -1,18 +1,19 @@
 import matplotlib.pyplot as mpl
 import streamlit as st
 import pandas as pd
+import numpy as np
 
 def barChart(df,x,y):
-    #CURRENTLY ONLY WORKS FOR TOTAL OCCURENCES OF X
+    #CURRENTLY ONLY WORKS FOR TOTAL OCCURENCES AND TOTAL DEATHS FOR X
     height = 600
     if y == 'Total Disasters':
         counts = df[x].value_counts().sort_values(ascending=True)
         fig, ax = mpl.subplots(figsize=(8,max(4,len(counts)*0.3)))
         ax.barh(counts.index,counts.values,color='forestgreen',edgecolor='black')
     elif y == 'Total Deaths':
-        #NOT SURE IF VALUES ARE IN THEIR COORESPONDING SPOTS
-        quals = df[x].unique().dropna()
+        quals = sorted(df[x].dropna().unique())
         quants = df.groupby(x)['Total Deaths'].sum().reset_index()
+        st.write(quants)
         quantTuple = tuple(quants['Total Deaths'])
         fig, ax = mpl.subplots(figsize=(8,max(4,len(quals)*0.3)))
         ax.barh(quals,quantTuple,color='forestgreen',edgecolor='black')
