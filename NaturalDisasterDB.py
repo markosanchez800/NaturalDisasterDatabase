@@ -36,37 +36,31 @@ cursor = connection.cursor()
 st.set_page_config(page_title='Natural Disaster Database', layout='centered')
 st.title('Natural Disaster Database')
 sidebar, main_content = st.columns([1,2])
+# Graph generation on sidebar
 with sidebar:
     st.header('Make a Chart/Plot')
-    with st.form('make_chart_form',clear_on_submit=True):
-        graphType = st.selectbox('Graph Type:',graphTypes)
-        #ADD ACTUAL IMPLEMENTATION  USING MATPLOTLIB
-        submit_btn = st.form_submit_with_no_rerun = st.form_submit_button('Select Chart/Graph')
-        if submit_btn:
-            match graphType:
-                case 'Bar Chart':
-                    variableOne = st.text_input('Variable One')
-                    variableTwo = st.text_input('Variable Two')
-                case 'Line Plot':
-                    variableOne = st.text_input('Variable One')
-                    variableTwo = st.text_input('Variable Two')
-                case 'Pie Chart':
-                    variableOne = st.text_input('Variable One')
-                    variableTwo = st.text_input('Variable Two')
-                case 'Scatter Plot':
-                    variableOne = st.text_input('Variable One')
-                    variableTwo = st.text_input('Variable Two')
-                case 'Pre-Made Graphs':
-                    premadeGraph = st.selectbox('Pre-Made Graphs:',preMadeGraphs)
-                    premadebtn = st.form_submit_with_no_rerun = st.form_submit_button('Select')
-                    if premadebtn:
-                        match premadeGraph:
-                            case 'Disasters By Continent (Pie)':
-                                mpf.disastersByContinent()
-                            case 'Disasters By Country (Bar)':
-                                mpf.disastersByCountry()
-                            case 'Disasters By Year (Bar)':
-                                mpf.disastersByYear()
+    graphType = st.selectbox('Graph Type:',graphTypes)
+    if graphType == 'Pre-Made Graphs':
+        premadeGraph = st.selectbox('Pre-Made Graphs:',preMadeGraphs)
+        if st.button('Select'):
+            st.session_state.premade_choice = premadeGraph
+    elif graphType in graphTypes:
+        variableOne = st.text_input('Variable One:')
+        variableTwo = st.text_input('Variable Two:')
+        if st.button('Create'):
+            st.session_state.create_choice = graphType
+choice = st.session_state.get('premade_choice')
+if choice:
+    match choice:
+        case 'Disasters By Continent (Pie)':
+            mpf.disastersByContinent(df19002021)
+        case 'Disasters By Country (Bar)':
+            mpf.disastersByCountry(df19002021)
+        case 'Disasters By Year (Bar)':
+            mpf.disastersByYear(df19002021)
+        case _:
+            st.warning(f'No match for {premadeGraph!r}')
+# Query generation on center
 with main_content:
     st.header('Natural Disasters 1900-2021')
     st.dataframe(df19002021,use_container_width=True,hide_index=True)
