@@ -10,11 +10,11 @@ def barChart(df,x,y):
         counts = df[x].value_counts().sort_values(ascending=True)
         fig, ax = mpl.subplots(figsize=(8,max(4,len(counts)*0.3)))
         ax.barh(counts.index,counts.values,color='forestgreen',edgecolor='black')
-    elif y == 'Total Deaths':
+    else:
         quals = sorted(df[x].dropna().unique())
-        quants = df.groupby(x)['Total Deaths'].sum().reset_index()
+        quants = df.groupby(x)[y].sum().reset_index()
         st.write(quants)
-        quantTuple = tuple(quants['Total Deaths'])
+        quantTuple = tuple(quants[y])
         fig, ax = mpl.subplots(figsize=(8,max(4,len(quals)*0.3)))
         ax.barh(quals,quantTuple,color='forestgreen',edgecolor='black')
     ax.set_xlabel(f'{x}')
