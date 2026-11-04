@@ -32,19 +32,19 @@ def pieChart(df,x,y):
     if y == 'Total Disasters':
         counts = df[x].value_counts().sort_values(ascending=False)
         fig, ax = mpl.subplots()
-        ax.pie(counts.values[:5],labels=counts.index[:5],autopct='%1.1f%%', shadow=True,startangle=90)
+        ax.pie(counts.values[:5],labels=counts.index[:5],autopct='%1.1f%%', shadow=True,startangle=50)
     else:
         values = df.groupby(x)[y].sum().reset_index().sort_values(by=y,ascending=False)
         st.write(values)
         quantTuple = tuple(values[y][:5])
         qualTuple = tuple(values[x][:5])
         fig,ax = mpl.subplots()
-        ax.pie(quantTuple,labels=qualTuple,autopct='%1.1f%%',shadow=True,startangle=90)
+        ax.pie(quantTuple,labels=qualTuple,autopct='%1.1f%%',shadow=True,startangle=50,textprops={'fontsize':8})
     ax.axis('equal')
     st.title(f'{y} by {x}')
     st.pyplot(fig)
-#Pre-Made Charts
 
+#Pre-Made Charts
 def disastersByContinent(df):
     counts = df['Continent'].value_counts()
     fig, ax = mpl.subplots()
