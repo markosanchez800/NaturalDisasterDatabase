@@ -4,19 +4,18 @@ import pandas as pd
 import numpy as np
 
 def barChart(df,x,y):
-    #CURRENTLY ONLY WORKS FOR TOTAL OCCURENCES AND TOTAL DEATHS FOR X
     height = 600
     if y == 'Total Disasters':
         counts = df[x].value_counts().sort_values(ascending=True)
         fig, ax = mpl.subplots(figsize=(8,max(4,len(counts)*0.3)))
         ax.barh(counts.index,counts.values,color='forestgreen',edgecolor='black')
     else:
-        quals = sorted(df[x].dropna().unique())
-        quants = df.groupby(x)[y].sum().reset_index()
-        st.write(quants)
-        quantTuple = tuple(quants[y])
-        fig, ax = mpl.subplots(figsize=(8,max(4,len(quals)*0.3)))
-        ax.barh(quals,quantTuple,color='forestgreen',edgecolor='black')
+        values = df.groupby(x)[y].sum().reset_index().sort_values(by=y,ascending=False)
+        st.write(values)
+        quantTuple = tuple(values[y])
+        qualTuple = tuple(values[x])
+        fig, ax = mpl.subplots(figsize=(8,max(4,len(qualTuple)*0.3)))
+        ax.barh(qualTuple,quantTuple,color='forestgreen',edgecolor='black')
     ax.set_xlabel(f'{x}')
     ax.set_ylabel(f'{y}')
     ax.margins(y=0.005)
@@ -29,18 +28,24 @@ def lineGraph():
     return(1)
 
 def pieChart(df,x,y):
-    #CURRENTLY ONLY WORKS FOR TOTAL OCCURENCES OF X AND MOST CHARTS ARE TOO PACKED FOR READABILITY
-    #MAYBE ONLY PLOT TOP 5-6 FOR PIE CHART?
-    counts = df[x].value_counts()
-    fig, ax = mpl.subplots()
-    ax.pie(counts.values,labels=counts.index,autopct='%1.1f%%', shadow=True,startangle=90)
+    # WANT TO ADD 'OTHER' CATEGORY TO PIE CHART
+    if y == 'Total Disasters':
+        counts = df[x].value_counts().sort_values(ascending=False)
+        fig, ax = mpl.subplots()
+        ax.pie(counts.values[:5],labels=counts.index[:5],autopct='%1.1f%%', shadow=True,startangle=90)
+    else:
+        values = df.groupby(x)[y].sum().reset_index().sort_values(by=y,ascending=False)
+        st.write(values)
+        quantTuple = tuple(values[y][:5])
+        qualTuple = tuple(values[x][:5])
+        fig,ax = mpl.subplots()
+        ax.pie(quantTuple,labels=qualTuple,autopct='%1.1f%%',shadow=True,startangle=90)
     ax.axis('equal')
     st.title(f'{y} by {x}')
     st.pyplot(fig)
 #Pre-Made Charts
 
 def disastersByContinent(df):
-    #Pie chart
     counts = df['Continent'].value_counts()
     fig, ax = mpl.subplots()
     ax.pie(counts.values,labels=counts.index,autopct='%1.1f%%', shadow=True,startangle=90)

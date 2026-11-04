@@ -67,7 +67,7 @@ if toCreate:
     match graphType:
         case 'Bar Chart':
             mpf.barChart(df19002021,variableOne,variableTwo)
-        case 'Pie Chart Top 5':
+        case 'Pie Chart (Top 5)':
             mpf.pieChart(df19002021,variableOne,variableTwo)
 # Query generation on center
 with main_content:
