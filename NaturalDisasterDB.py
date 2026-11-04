@@ -69,6 +69,8 @@ if toCreate:
             mpf.barChart(df19002021,variableOne,variableTwo)
         case 'Pie Chart (Top 5)':
             mpf.pieChart(df19002021,variableOne,variableTwo)
+        case 'Line Plot':
+            mpf.linePlot(df19002021,variableOne,variableTwo)
 # Query generation on center
 with main_content:
     st.header('Natural Disasters 1900-2021')

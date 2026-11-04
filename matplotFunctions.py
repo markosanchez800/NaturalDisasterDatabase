@@ -21,11 +21,21 @@ def barChart(df,x,y):
     ax.margins(y=0.005)
     fig.tight_layout()
     st.title(f'{y} by {x}')
-    with st.container(height=height):
-        st.pyplot(fig)
+    #with st.container(height=height):
+    st.pyplot(fig)
 
-def lineGraph():
-    return(1)
+def linePlot(df,x,y):
+    if y == 'Total Disasters':
+        counts = df[x].value_counts().sort_values(ascending=True)
+        fig, ax = mpl.subplots()
+        ax.plot(counts.index,counts.values,linestyle='-',marker='o',linewidth=2)
+    else:
+        #do things
+        g = 1
+    ax.set_xlabel(f'{x}')
+    ax.set_ylabel(f'{y}')
+    st.title(f'{y} by {x}')
+    st.pyplot(fig)
 
 def pieChart(df,x,y):
     # WANT TO ADD 'OTHER' CATEGORY TO PIE CHART
