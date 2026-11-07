@@ -31,9 +31,24 @@ quanvariableTypes = ('Total Deaths','No Injured',"Total Damages ('000 US$)",'Tot
 
 dhf.cleanDataFrame(df19002021)
 
+# Create SQLite database connection
 connection = sqlite3.connect('disasters.db')
-df19002021.to_sql(name='Disasters_1900_2021', con = connection, if_exists = 'replace', index = False)
 cursor = connection.cursor()
+cursor.execute("""
+    SELECT name
+    FROM sqlite_master
+    WHERE type='table'
+    AND name='Disasters_1900_2021'
+""")
+# Check if the table exists, if not, create it
+table_exists = cursor.fetchone()
+if table_exists is None:
+    df19002021.to_sql(
+        name='Disasters_1900_2021',
+        con=connection,
+        if_exists='fail',
+        index=False
+    )
 
 st.set_page_config(page_title='Natural Disaster Database', layout='centered')
 st.title('Natural Disaster Database')
@@ -90,5 +105,26 @@ with main_content:
                 st.write('Nothing found matching that query!')
             else:
                 st.dataframe(sqf.streamlitQuery(connection,year1,year2,country,disaster_subgroup,disaster_type,disaster_subtype,region,continent))
+
+st.subheader("Manage Disaster Records")
+
+action = st.selectbox(
+    "Choose an action:",
+    [
+        "None",
+        "Add Disaster",
+        "Update Disaster",
+        "Delete Disaster"
+    ]
+)
+
+if action == "Add Disaster":
+    mpf.addDisasterStreamlit()
+
+elif action == "Update Disaster":
+    mpf.updateDisasterStreamlit()
+
+elif action == "Delete Disaster":
+    mpf.deleteDisasterStreamlit()
 
 #connection.close()
