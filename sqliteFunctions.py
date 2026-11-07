@@ -2,6 +2,8 @@ import sqlite3
 import pandas as pd
 
 DB_NAME = "disasters.db"
+# table name for the disasters data
+TABLE_NAME = "Disasters_1900_2021"
 
 # Functions for interacting with the SQLite database
 def beginSQLiteSession():
@@ -109,6 +111,41 @@ def getDeadliestDisasters(connection):
     """)
 
     return cursor.fetchall()
+
+# Functions to add a disaster record
+def addDisaster(connection, country, disaster_type, year, total_deaths):
+    cursor = connection.cursor()
+    cursor.execute(f"""
+        INSERT INTO {TABLE_NAME}
+        (Country, [Disaster Type], [Start Year], [Total Deaths])
+        VALUES (?, ?, ?, ?)
+    """, (country, disaster_type, year, total_deaths))
+    connection.commit()
+    return cursor.lastrowid
+
+# Function to update a disaster record
+def updateDisaster(connection, row_id, country, disaster_type, year, total_deaths):
+    cursor = connection.cursor()
+    cursor.execute(f"""
+        UPDATE {TABLE_NAME}
+        SET Country = ?,
+            [Disaster Type] = ?,
+            [Start Year] = ?,
+            [Total Deaths] = ?
+        WHERE rowid = ?
+    """, (country, disaster_type, year, total_deaths, row_id))
+    connection.commit()
+    return cursor.rowcount
+
+# Function to delete a disaster record
+def deleteDisaster(connection, row_id):
+    cursor = connection.cursor()
+    cursor.execute(f"""
+        DELETE FROM {TABLE_NAME}
+        WHERE rowid = ?
+    """, (row_id,))
+    connection.commit()
+    return cursor.rowcount
 
 # Function to close the SQLite session
 def closeSQLiteSession(connection):

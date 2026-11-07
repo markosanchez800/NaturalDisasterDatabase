@@ -31,8 +31,8 @@ quanvariableTypes = ('Total Deaths','No Injured',"Total Damages ('000 US$)",'Tot
 
 dhf.cleanDataFrame(df19002021)
 
-# Create SQLite database connection
-connection = sqlite3.connect('disasters.db')
+# create the SQLite database and table if they don't exist
+connection = sqf.beginSQLiteSession()
 cursor = connection.cursor()
 cursor.execute("""
     SELECT name
