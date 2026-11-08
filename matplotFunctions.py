@@ -26,12 +26,14 @@ def barChart(df,x,y):
 
 def linePlot(df,x,y):
     if y == 'Total Disasters':
-        counts = df[x].value_counts().sort_values(ascending=True)
+        counts = df[x].value_counts().sort_index()
         fig, ax = mpl.subplots()
-        ax.plot(counts.index,counts.values,linestyle='-',marker='o',linewidth=2)
+        ax.plot(counts.index,counts.values,linestyle='-',marker='o',linewidth=2, color='forestgreen')
     else:
-        #do things
-        g = 1
+        values = (df.groupby(x)[y].sum().reset_index().sort_values(by=x))
+        st.write(values)
+        fig, ax = mpl.subplots(figsize=(8, 5))
+        ax.plot(values[x], values[y], linestyle='-', marker='o', linewidth=2, color='forestgreen')
     ax.set_xlabel(f'{x}')
     ax.set_ylabel(f'{y}')
     st.title(f'{y} by {x}')
