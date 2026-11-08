@@ -39,6 +39,21 @@ def linePlot(df,x,y):
     st.title(f'{y} by {x}')
     st.pyplot(fig)
 
+def scatterPlot(df, x, y):
+    if y == 'Total Disasters':
+        counts = df[x].value_counts().sort_index()
+        fig, ax = mpl.subplots()
+        ax.scatter(counts.index, counts.values, color='forestgreen', edgecolor='black')
+    else:
+        values = (df.groupby(x)[y].sum().reset_index().sort_values(by=x))
+        st.write(values)
+        fig, ax = mpl.subplots(figsize=(8, 5))
+        ax.scatter(values[x], values[y], color='forestgreen', edgecolor='black')
+    ax.set_xlabel(f'{x}')
+    ax.set_ylabel(f'{y}')
+    st.title(f'{y} by {x}')
+    st.pyplot(fig)
+
 def pieChart(df,x,y):
     # WANT TO ADD 'OTHER' CATEGORY TO PIE CHART
     if y == 'Total Disasters':
