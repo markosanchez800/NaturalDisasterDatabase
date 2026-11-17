@@ -35,7 +35,7 @@ connection = sqlite3.connect('disasters.db')
 df19002021.to_sql(name='Disasters_1900_2021', con = connection, if_exists = 'replace', index = False)
 cursor = connection.cursor()
 
-st.set_page_config(page_title='Natural Disaster Database', layout='centered')
+st.set_page_config(page_title='Natural Disaster Database', layout='wide', initial_sidebar_state='expanded')
 st.title('Natural Disaster Database')
 sidebar, main_content = st.columns([1,2])
 # Graph generation on sidebar
