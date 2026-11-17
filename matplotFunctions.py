@@ -28,7 +28,8 @@ def linePlot(df,x,y):
     if y == 'Total Disasters':
         counts = df[x].value_counts().sort_values(ascending=True)
         fig, ax = mpl.subplots()
-        ax.plot(counts.index,counts.values,linestyle='-',marker='o',linewidth=2)
+        for i in range(len(counts)):
+            ax.plot(counts[i].index,counts[i].values,linestyle='-',marker='o',linewidth=2)
     else:
         #do things
         g = 1
